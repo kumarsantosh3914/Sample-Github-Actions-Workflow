@@ -11,7 +11,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        
+        with:
+          fetch-depth: 0  # Fetch all history for all branches
+
       - name: Get branch name
         run: echo "Current branch is ${GITHUB_REF#refs/heads/}"
       
@@ -24,4 +26,4 @@ jobs:
       - name: List changed files
         run: |
           echo "Files changed in this commit:"
-          git diff --name-status ${{ github.event.before }} ${{ github.event.after }}
+          git show --name-status ${GITHUB_SHA}
