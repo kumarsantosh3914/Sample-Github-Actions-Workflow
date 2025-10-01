@@ -1,0 +1,29 @@
+name: "On Commit Workflow"
+
+# This workflow will run on any commit to any branch
+on:
+  push:
+    # No branches specified means it will run on all branches
+    
+jobs:
+  commit_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for all branches
+
+      - name: Get branch name
+        run: echo "Current branch is ${GITHUB_REF#refs/heads/}"
+      
+      - name: Get commit info
+        run: |
+          echo "Commit message: ${{ github.event.head_commit.message }}"
+          echo "Committed by: ${{ github.event.head_commit.author.name }}"
+          echo "Commit timestamp: ${{ github.event.head_commit.timestamp }}"
+      
+      - name: List changed files
+        run: |
+          echo "Files changed in this commit:"
+          git show --name-status ${GITHUB_SHA}
